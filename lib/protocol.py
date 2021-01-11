@@ -32,12 +32,10 @@ class DrinkClientSocket(BaseDrinkClass):
         self.HEADER = 10
 
     def connect(self, host='127.0.0.1', port=29888):
-        self.debug(f"Attempting to connect to {host}, {port}")
+        self.debug(f"Attempting to connect to {host}, on port {port}")
         self.sock.connect((host, port))
 
     def build_with_buffersize(self, msg):
-        print(msg)
-        msg = f'{len(msg):<{self.HEADER}}' + msg
         return bytes(msg, "utf-8")
 
     def send_data(self, data: str):
@@ -73,12 +71,22 @@ class DrinkServerSocket(BaseDrinkClass):
             )
         else:
             self.sock = sock
+            self.header = 10
 
     def bind_and_listen(self, host='127.0.0.1', port=29888):
-        self.debug(f"Attempting to bind and listen on {host}, {port}")
+        self.debug(f"Attempting to bind and listen on {host}, on port {port}")
         self.sock.bind((host, port))
         # Should not have more than 5 requests at a time   
         self.sock.listen(5)
+        return self.sock
+    
+    def accept(self):
+        while True:
+            clientsocket, address = self.sock.accept()
+            data = clientsocket.recv(1024)
+            self.info(f"Data recieved {data} from {address}")
+            clientsocket.send(bytes(f"Data Accepted from {address}", "utf-8"))
+
     
 class DrinkProtocol(BaseDrinkClass):
     """
