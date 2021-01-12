@@ -10,7 +10,7 @@ from lib.protocol import Alcohol_to_Pump
 
 base_recipe = DrinkProtocol()
 
-recipe = base_recipe.transform("gin and tonic", Alcohol_to_Pump.COKE.name, Alcohol_to_Pump.GIN.name, 3)
+recipe = base_recipe.transform("gin and tonic", Alcohol_to_Pump.GIN.name, Alcohol_to_Pump.TONIC.name, 3)
 
 drinksock = DrinkClientSocket()
 
