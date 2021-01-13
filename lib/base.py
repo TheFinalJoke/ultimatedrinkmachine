@@ -1,12 +1,15 @@
 import logging 
 
-formatter = logging.Formatter(
+stream_formatter = logging.Formatter(
     "%(levelname)s:%(asctime)s:%(module)s: %(message)s"
 )
 sh = logging.StreamHandler()
-sh.setFormatter(formatter)
+filehandler = logging.FileHandler("/var/log/drinkmachine.log","a")
+sh.setFormatter(stream_formatter)
+filehandler.setFormatter(stream_formatter)
 logger = logging.getLogger(__name__)
 logger.addHandler(sh)
+logger.addHandler(filehandler)
 logger.setLevel(logging.DEBUG)
 
 class BaseDrinkClass(object):
