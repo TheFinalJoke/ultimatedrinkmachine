@@ -1,25 +1,33 @@
 import json
+import time
+import pdb
 import RPi.GPIO as GPIO
 from lib.base import BaseDrinkClass
 from enum import Enum
 from lib.protocol import Alcohol_to_Pump
 from lib.protocol import DrinkServerSocket
 
-import pdb
+def get_all_pins():
+    return list(map(lambda pin: pin.value, Alcohol_to_Pump))
 
-class PinToPump(Enum):
-    pass
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+GPIO.setup(get_all_pins(), GPIO.OUT, initial=GPIO.LOW)
 
 class DrinkServer(BaseDrinkClass):
     def __init__(self) -> None:
         super().__init__()
         self.header = 10
 
-    def operate_pump(self, pump, strength=None):
-        pass
+    def operate_pump(self, pump, strength):
+        for _ in range(1, strength):
+            GPIO.output(pump, GPIO.HIGH)
+            time.sleep(3)
+            GPIO.output(pump, GPIO.LOW)
+            time.sleep(1)
 
-    def dispense_alcohol(self, alcohol, strength):
-        pump_num = Alcohol_to_Pump[alcohol].value
+    def dispense_liquid(self, liquid, strength):
+        pump_num = Alcohol_to_Pump[liquid].value
         self.operate_pump(pump_num, strength)
 
     def parse_recipe(self, req):
@@ -27,9 +35,17 @@ class DrinkServer(BaseDrinkClass):
         alcohol = recipe.get("ALCOHOL")
         mixer = recipe.get("MIXER")
         strength = recipe.get("STRENGTH")
+        if alcohol == "CLEANER":
+            self.info("Initializing Cleaning cycle")
+            self.dispense_liquid("CLEANER", strength)
+        else:
+            self.debug(f"Dispensing {alcohol}")
+            self.dispense_liquid(alcohol, strength)
+            self.debug(f"Dispensing {mixer}")
+            self.dispense_liquid(mixer, 5)
+        return recipe.get("NAME")
+ 
 
-        
-        
     def run(self):
         server = DrinkServerSocket()
         server_sock = server.bind_and_listen()
@@ -37,9 +53,10 @@ class DrinkServer(BaseDrinkClass):
         while True:
             clientsocket, addr = server_sock.accept()
             data = clientsocket.recv(1024)
-            self.info(f"Data Recvd {data}")
-            clientsocket.send(bytes(f"Data Accepted from {addr}", "utf-8"))
-            self.parse_recipe(data)
+            self.info(f"Data Recvd {data} from {addr}")
+            name = self.parse_recipe(data)
+            clientsocket.send(bytes(f"Dispensed {name}", "utf-8"))
 if __name__ == "__main__":
     alfred = DrinkServer()
     alfred.run()
+    GPIO.cleanup()

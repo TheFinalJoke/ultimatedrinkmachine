@@ -11,10 +11,14 @@ from lib.base import BaseDrinkClass
 alcohol_list = []
 
 class Alcohol_to_Pump(Enum):
-    GIN=1
-    WHISKEY=2
-    COKE=3
-    TONIC=4
+    GIN=29
+    WHISKEY=11
+    BOURBON=8
+    VODKA=38
+    COKE=13
+    TONIC=15
+    SPRITE=36
+    CLEANER=40
 
 class DrinkException(Exception):
     pass
