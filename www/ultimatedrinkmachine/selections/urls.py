@@ -5,5 +5,6 @@ app_name = "selections"
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
-    path("<int:pk>/", views.SelectedView.as_view(), name='selected')
+    path("<int:recipe_id>/selected/", views.forms_selected, name='selected'),
+    path("<int:recipe_id>/package/", views.package, name='package'),
 ]

@@ -14,11 +14,7 @@ from pathlib import Path
 import os
 import sys
 
-SITE_PATH = os.path.abspath(os.path.dirname(__file__))
-PROJECT_PATH = os.path.normpath(os.path.join(SITE_PATH, '..', '..'))
-SRC_PATH = os.path.join(PROJECT_PATH, 'www')
-if SRC_PATH not in sys.path:
-    sys.path.insert(0, SRC_PATH)
+sys.path.append("/home/nickshorter/ultimatedrinkmachine/")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 
 import json
-from pickle import DICT, STRING
+import sqlite3
 import socket
 from enum import Enum
+import pdb
+from lib.talking import (
+    Accessor,
+    FormulateViewQuery
+)
+from django.db import connection
+
 from lib.base import BaseDrinkClass
 
 #HEADER = 10
-# Might have to write to disk 
-alcohol_list = []
-
-class Alcohol_to_Pump(Enum):
-    GIN=29
-    WHISKEY=11
-    BOURBON=8
-    VODKA=38
-    COKE=13
-    TONIC=15
-    SPRITE=36
-    CLEANER=40
+# Might have to write to disk
+DBPATH = "/home/nickshorter/ultimatedrinkmachine/www/ultimatedrinkmachine/db.sqlite3"
+accessor = Accessor(DBPATH)
+view_query = FormulateViewQuery.query("selections_recipe")
+results = accessor.execute(view_query)
+pdb.set_trace()
+ALCOHOL_TO_PUMP = []
 
 class DrinkException(Exception):
     pass

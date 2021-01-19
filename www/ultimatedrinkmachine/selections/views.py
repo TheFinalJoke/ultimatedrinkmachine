@@ -1,10 +1,17 @@
 from django import template
+import pdb
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404
 from django.template.response import TemplateResponse
 from django.shortcuts import render
 from django.views import generic
-from .models import Recipe, PumpToALiquid
+from .models import Recipe, PumpToALiquid, Strength
+from .forms import StrengthForm
+from lib.protocol import (
+    DrinkClientSocket,
+    DrinkProtocol,
+)
 
 class IndexView(generic.ListView):
     template_name = 'selections/index.html'
@@ -12,6 +19,25 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         return Recipe.objects.all()
 
-class SelectedView(generic.DetailView):
-    model = Recipe
-    template_name = "selections/selected.html"
+def forms_selected(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)  
+    form = StrengthForm()
+    return render(request, 'selections/selected.html', {'form': form, 'recipe': recipe})
+
+def package(request, recipe_id):
+    if request.method == "POST":
+        form = StrengthForm(request.POST)
+        if form.is_valid():
+            transform = DrinkProtocol()
+            recipe = get_object_or_404(Recipe, id=recipe_id)
+            strength = form.cleaned_data['strength']
+            transformed_recipe = transform.transform(
+                recipe.name, 
+                recipe.alcohol.liquid,
+                recipe.mixer.liquid,
+                int(strength))
+            messages.success(request, "Dispensing")
+            drinksock = DrinkClientSocket()
+            drinksock.connect()
+            recv = drinksock.send_data(transformed_recipe)           
+            return HttpResponse(f"{recv}")
