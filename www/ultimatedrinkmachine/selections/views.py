@@ -2,7 +2,7 @@ from django import template
 import pdb
 from django.http.response import HttpResponse
 from django.contrib import messages
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.template.response import TemplateResponse
 from django.shortcuts import render
 from django.views import generic
@@ -11,6 +11,7 @@ from .forms import StrengthForm
 from lib.protocol import (
     DrinkClientSocket,
     DrinkProtocol,
+    ALCOHOL_TO_PUMP
 )
 
 class IndexView(generic.ListView):
@@ -36,8 +37,10 @@ def package(request, recipe_id):
                 recipe.alcohol.liquid,
                 recipe.mixer.liquid,
                 int(strength))
-            messages.success(request, "Dispensing")
             drinksock = DrinkClientSocket()
             drinksock.connect()
             recv = drinksock.send_data(transformed_recipe)           
-            return HttpResponse(f"{recv}")
+            return render(request, 'selections/post_dispense.html', {'recv': recv})
+
+def post_dispense(request, recipe_id):
+    return render(request, 'selections/post_dispense.html')

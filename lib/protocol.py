@@ -15,12 +15,14 @@ from lib.base import BaseDrinkClass
 
 #HEADER = 10
 # Might have to write to disk
+atp = {}
 DBPATH = "/home/nickshorter/ultimatedrinkmachine/www/ultimatedrinkmachine/db.sqlite3"
 accessor = Accessor(DBPATH)
-view_query = FormulateViewQuery.query("selections_recipe")
+view_query = FormulateViewQuery.query("selections_pumptoaliquid")
 results = accessor.execute(view_query)
-pdb.set_trace()
-ALCOHOL_TO_PUMP = []
+for _, _name, _pin in results:
+    atp[_name] = _pin
+ALCOHOL_TO_PUMP = Enum("ALCOHOL_TO_PUMP", atp)
 
 class DrinkException(Exception):
     pass
@@ -116,7 +118,7 @@ class DrinkProtocol(BaseDrinkClass):
         Checks Against the Enum to make sure
         Liquid has a pump number too it
         """
-        return liquid in Alcohol_to_Pump.__members__
+        return liquid in ALCOHOL_TO_PUMP.__members__
 
     def transform(self, name, alcohol, mixer, strength):
         """

@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path("<int:recipe_id>/selected/", views.forms_selected, name='selected'),
     path("<int:recipe_id>/package/", views.package, name='package'),
+    path("<int:recipe_id>/post_dispense/", views.post_dispense, name='post_dispense')
 ]
