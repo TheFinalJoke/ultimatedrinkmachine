@@ -15,15 +15,15 @@ from lib.base import BaseDrinkClass
 
 #HEADER = 10
 # Might have to write to disk
+
 atp = {}
 DBPATH = "/home/nickshorter/ultimatedrinkmachine/www/ultimatedrinkmachine/db.sqlite3"
 accessor = Accessor(DBPATH)
 view_query = FormulateViewQuery.query("selections_pumptoaliquid")
 results = accessor.execute(view_query)
-for _, _name, _pin in results:
+for _, _name, _pin, _liq_type in results:
     atp[_name] = _pin
 ALCOHOL_TO_PUMP = Enum("ALCOHOL_TO_PUMP", atp)
-
 class DrinkException(Exception):
     pass
 

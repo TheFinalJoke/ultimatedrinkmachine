@@ -7,7 +7,10 @@ from django.template.response import TemplateResponse
 from django.shortcuts import render
 from django.views import generic
 from .models import Recipe, PumpToALiquid, Strength
-from .forms import StrengthForm
+from .forms import (
+    DeleteDrinkForm, StrengthForm,
+    AddDrinkForm
+)
 from lib.protocol import (
     DrinkClientSocket,
     DrinkProtocol,
@@ -44,3 +47,36 @@ def package(request, recipe_id):
 
 def post_dispense(request, recipe_id):
     return render(request, 'selections/post_dispense.html')
+
+def add_drink(request):
+    drinkform = AddDrinkForm()
+    return render(request, 'selections/add_drink.html', {"drinkform": drinkform})
+
+def delete_recipe(request):
+    deleteform = DeleteDrinkForm()
+    return render(request, 'selections/deleterecipe.html', {"deleteform": deleteform})
+def post_adddrink(request):
+    if request.method == "POST":
+        form = AddDrinkForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            alcohol = form.cleaned_data['Alcohol']
+            mixer = form.cleaned_data['Mixer']
+            alcohol_obj = PumpToALiquid.objects.filter(pump_num=alcohol)[0]
+            mixer_obj = PumpToALiquid.objects.filter(pump_num=mixer)[0]
+            Recipe_obj = Recipe(
+                name=name, 
+                alcohol=alcohol_obj, 
+                mixer=mixer_obj)
+            Recipe_obj.save()
+    return redirect('/selections/')
+
+def post_delete(request):
+    if request.method == "POST":
+        form = DeleteDrinkForm(request.POST)
+        if form.is_valid():
+            rec = form.cleaned_data['Recipes']
+            recipe_obj = Recipe.objects.filter(pk=rec)[0]
+            recipe_obj.delete()
+    return redirect('/selections/')
+            

@@ -1,0 +1,6 @@
+<form action="{% url 'selections:post_delete'%}" method="POST">
+    {% csrf_token %}
+    {{deleteform}}
+    <input id="submitForm" type="submit" value="Delete Recipe">
+</ul>
+</form> 

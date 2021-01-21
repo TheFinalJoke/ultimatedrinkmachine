@@ -1,0 +1,6 @@
+<form action="{% url 'selections:post_adddrink'%}" method="POST">
+    {% csrf_token %}
+    {{drinkform}}
+    <input id="submitForm" type="submit" value="Add Recipe">
+</ul>
+</form> 
