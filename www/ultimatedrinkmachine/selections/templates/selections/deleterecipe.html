@@ -1,6 +1,23 @@
-<form action="{% url 'selections:post_delete'%}" method="POST">
-    {% csrf_token %}
-    {{deleteform}}
-    <input id="submitForm" type="submit" value="Delete Recipe">
-</ul>
-</form> 
+{% load static %}
+<!doctype html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{% static '/selections/style.css' %}">
+</head>
+<div id='main_container' class="conatiner-fluid main_container d-flex">
+    <div id='main_row' class="row flex-fill ">
+        <div id="col" class="col-sm-6 h-100 w-100">
+            <form action="{% url 'selections:post_delete'%}" method="POST">
+                {% csrf_token %}
+                {{deleteform.as_p}}
+                <input class='btn btn-danger' id="submitForm" type="submit" value="Delete Recipe">
+            </form> 
+            <p></p>
+            <form id="backindex" action="{% url 'selections:index' %}">
+                <input class="btn btn-warning" type="submit" value="Back to Drinks" />
+            </form> 
+        </div>
+    </div>
+</div>    

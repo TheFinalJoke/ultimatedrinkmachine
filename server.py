@@ -4,11 +4,11 @@ import pdb
 import RPi.GPIO as GPIO
 from lib.base import BaseDrinkClass
 from enum import Enum
-from lib.protocol import Alcohol_to_Pump
+from lib.protocol import ALCOHOL_TO_PUMP
 from lib.protocol import DrinkServerSocket
 
 def get_all_pins():
-    return list(map(lambda pin: pin.value, Alcohol_to_Pump))
+    return list(map(lambda pin: pin.value, ALCOHOL_TO_PUMP))
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
@@ -27,7 +27,7 @@ class DrinkServer(BaseDrinkClass):
             time.sleep(1)
 
     def dispense_liquid(self, liquid, strength):
-        pump_num = Alcohol_to_Pump[liquid].value
+        pump_num = ALCOHOL_TO_PUMP[liquid].value
         self.operate_pump(pump_num, strength)
 
     def parse_recipe(self, req):

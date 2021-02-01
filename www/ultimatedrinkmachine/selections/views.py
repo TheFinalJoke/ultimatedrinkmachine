@@ -1,5 +1,4 @@
 from django import template
-import pdb
 from django.http.response import HttpResponse
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
