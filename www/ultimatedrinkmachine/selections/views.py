@@ -1,8 +1,4 @@
-from django import template
-from django.http.response import HttpResponse
-from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
-from django.template.response import TemplateResponse
 from django.shortcuts import render
 from django.views import generic
 from .models import Recipe, PumpToALiquid, Strength
@@ -13,7 +9,6 @@ from .forms import (
 from lib.protocol import (
     DrinkClientSocket,
     DrinkProtocol,
-    ALCOHOL_TO_PUMP
 )
 
 class IndexView(generic.ListView):
