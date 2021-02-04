@@ -1,21 +1,29 @@
 #!/usr/bin/env python3
 
 import json
-from pickle import DICT, STRING
+import sqlite3
 import socket
 from enum import Enum
+import pdb
+from lib.talking import (
+    Accessor,
+    FormulateViewQuery
+)
+from django.db import connection
+
 from lib.base import BaseDrinkClass
 
 #HEADER = 10
-# Might have to write to disk 
-alcohol_list = []
+# Might have to write to disk
 
-class Alcohol_to_Pump(Enum):
-    GIN=1
-    WHISKEY=2
-    COKE=3
-    TONIC=4
-
+atp = {}
+DBPATH = "/home/nickshorter/ultimatedrinkmachine/www/ultimatedrinkmachine/db.sqlite3"
+accessor = Accessor(DBPATH)
+view_query = FormulateViewQuery.query("selections_pumptoaliquid")
+results = accessor.execute(view_query)
+for _, _name, _pin, _liq_type in results:
+    atp[_name] = _pin
+ALCOHOL_TO_PUMP = Enum("ALCOHOL_TO_PUMP", atp)
 class DrinkException(Exception):
     pass
 
@@ -110,7 +118,7 @@ class DrinkProtocol(BaseDrinkClass):
         Checks Against the Enum to make sure
         Liquid has a pump number too it
         """
-        return liquid in Alcohol_to_Pump.__members__
+        return liquid in ALCOHOL_TO_PUMP.__members__
 
     def transform(self, name, alcohol, mixer, strength):
         """

@@ -1,0 +1,10 @@
+[Unit]
+Description=Drink Server 
+
+[Service]
+ExecStart=/usr/bin/python3 /home/nickshorter/ultimatedrinkmachine/server.py
+User=root
+ExecStop=/usr/bin/python3 /home/nickshorter/ultimatedrinkmachine/postserver.py
+
+[Install]
+WantedBy=multi-user.target
