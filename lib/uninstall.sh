@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[`id -u` != 0 ]]
+if [[ `id -u` != 0 ]]
 then
 echo "Become Root"
 exit 1 
