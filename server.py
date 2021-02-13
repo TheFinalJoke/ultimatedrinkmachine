@@ -12,7 +12,7 @@ def get_all_pins():
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
-GPIO.setup(get_all_pins(), GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(get_all_pins(), GPIO.OUT, initial=GPIO.HIGH)
 
 class DrinkServer(BaseDrinkClass):
     def __init__(self) -> None:
@@ -21,9 +21,9 @@ class DrinkServer(BaseDrinkClass):
 
     def operate_pump(self, pump, strength):
         for _ in range(1, strength):
-            GPIO.output(pump, GPIO.HIGH)
-            time.sleep(3)
             GPIO.output(pump, GPIO.LOW)
+            time.sleep(3)
+            GPIO.output(pump, GPIO.HIGH)
             time.sleep(1)
 
     def dispense_liquid(self, liquid, strength):
