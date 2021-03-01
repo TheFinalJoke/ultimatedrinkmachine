@@ -11,5 +11,6 @@ urlpatterns = [
     path("add_drink/", views.add_drink, name="add_drink"),
     path('post_adddrink/', views.post_adddrink, name="post_adddrink"),
     path('deleterecipe/', views.delete_recipe, name="delete_recipe"),
-    path('postdelete/', views.post_delete, name='post_delete')
+    path('postdelete/', views.post_delete, name='post_delete'),
+    path('clean_cycle/', views.clean_cycle, name='clean_cycle')
 ]

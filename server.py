@@ -20,29 +20,36 @@ class DrinkServer(BaseDrinkClass):
         self.header = 10
 
     def operate_pump(self, pump, strength):
-        for _ in range(1, strength):
-            GPIO.output(pump, GPIO.LOW)
-            time.sleep(3)
-            GPIO.output(pump, GPIO.HIGH)
-            time.sleep(1)
+        GPIO.output(pump, GPIO.LOW)
+        time.sleep(strength)
+        GPIO.output(pump, GPIO.HIGH)
 
     def dispense_liquid(self, liquid, strength):
         pump_num = ALCOHOL_TO_PUMP[liquid].value
         self.operate_pump(pump_num, strength)
+    
+    def intiate_cleancycle(self):
+        try:
+            pump_num = ALCOHOL_TO_PUMP['Cleaner'].value
+            self.operate_pump(pump_num, 3)
+        except Exception as E:
+            self.error('Cleaner does not have a pump')
 
     def parse_recipe(self, req):
         recipe = json.loads(req)
         alcohol = recipe.get("ALCOHOL")
         mixer = recipe.get("MIXER")
         strength = recipe.get("STRENGTH")
-        if alcohol == "CLEANER":
+        if alcohol == "Cleaner":
             self.info("Initializing Cleaning cycle")
-            self.dispense_liquid("CLEANER", strength)
+            self.intiate_cleancycle()
+            self.info("Finished Cleaning Cycle")
         else:
             self.debug(f"Dispensing {alcohol}")
             self.dispense_liquid(alcohol, strength)
             self.debug(f"Dispensing {mixer}")
             self.dispense_liquid(mixer, 5)
+            self.debug(f"Dispensed {recipe['NAME']}")
         return recipe.get("NAME")
  
 

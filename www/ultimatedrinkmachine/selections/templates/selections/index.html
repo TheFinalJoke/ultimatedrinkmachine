@@ -20,17 +20,22 @@
                 {% endfor %}
             </div>
             <div id='button_row' class='row h-25'>
-                <div id="add_col" class='col-sm-4'>
+                <div id="add_col" class='col-sm-3'>
                     <form action="{% url 'selections:add_drink' %}">
                         <input class="btn btn-primary" type="submit" value="Add Drink" />
                     </form>
                 </div>
-                <div id="delete_col" class='col-sm-4'>
+                <div id="delete_col" class='col-sm-3'>
                     <form action="{% url 'selections:delete_recipe' %}">
                         <input class="btn btn-primary" type="submit" value="Delete Recipe" />
                     </form>
                 </div>
-                <div id="admin_col" class='col-sm-4'>
+                <div id='clean_cy' class='col-sm-3'>
+                    <form action="{% url 'selections:clean_cycle' %}">
+                        <input class="btn btn-danger" type='submit' value='Clean Cycle' />
+                    </form>
+                </div>
+                <div id="admin_col" class='col-sm-3'>
                     <form action='/admin/'>
                         <input class="btn btn-success" type="submit" value="Go To Admin" />
                     </form>
