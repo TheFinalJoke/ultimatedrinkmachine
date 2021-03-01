@@ -6,15 +6,15 @@ import time
 from lib.base import BaseDrinkClass
 from lib.protocol import DrinkClientSocket
 from lib.protocol import DrinkProtocol
-from lib.protocol import Alcohol_to_Pump
+#from lib.protocol import Alcohol_to_Pump
 
 base_recipe = DrinkProtocol()
 recipes = [
-    base_recipe.transform("gin and tonic", Alcohol_to_Pump.GIN.name, Alcohol_to_Pump.TONIC.name, 3),
-    base_recipe.transform("Whiskey Coke", Alcohol_to_Pump.WHISKEY.name, Alcohol_to_Pump.COKE.name, 4),
-    base_recipe.transform("Vodka Sprite", Alcohol_to_Pump.VODKA.name, Alcohol_to_Pump.SPRITE.name, 1),
-    base_recipe.transform("Bourbon Coke", Alcohol_to_Pump.BOURBON.name, Alcohol_to_Pump.COKE.name, 5),
-    base_recipe.transform("CLEAN CYCLE FINISHED", "CLEANER", "CLEANER", 25)
+    base_recipe.transform("gin and tonic", 40, 40, 5),
+    #base_recipe.transform("Whiskey Coke", Alcohol_to_Pump.WHISKEY.name, Alcohol_to_Pump.COKE.name, 4),
+    #base_recipe.transform("Vodka Sprite", Alcohol_to_Pump.VODKA.name, Alcohol_to_Pump.SPRITE.name, 1),
+    #base_recipe.transform("Bourbon Coke", Alcohol_to_Pump.BOURBON.name, Alcohol_to_Pump.COKE.name, 5),
+    #base_recipe.transform("CLEAN CYCLE FINISHED", "CLEANER", "CLEANER", 25)
     ]
 
 

@@ -9,7 +9,7 @@ class Cleanup(BaseDrinkClass):
     
     def run_cleanup(self):
         self.info("Cleaning up GPIO Ports")
-        GPIO.setup(get_all_pins(), GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(get_all_pins(), GPIO.OUT, initial=GPIO.HIGH)
         GPIO.cleanup()
     
 if __name__ == "__main__":

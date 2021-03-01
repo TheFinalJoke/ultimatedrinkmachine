@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.shortcuts import render
 from django.views import generic
+from django.contrib import messages
 from .models import Recipe, PumpToALiquid, Strength
 from .forms import (
     DeleteDrinkForm, StrengthForm,
@@ -72,5 +73,17 @@ def post_delete(request):
             rec = form.cleaned_data['Recipes']
             recipe_obj = Recipe.objects.filter(pk=rec)[0]
             recipe_obj.delete()
+    return redirect('/selections/')
+
+def clean_cycle(request):
+    transform = DrinkProtocol()
+    transformed_recipe = transform.transform(
+        'CLEANING CYCLE',
+        'Cleaner',
+        'Cleaner',
+        120)
+    drinksock = DrinkClientSocket()
+    drinksock.connect()
+    recv = drinksock.send_data(transformed_recipe)  
     return redirect('/selections/')
             
