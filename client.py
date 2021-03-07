@@ -6,17 +6,14 @@ import time
 from lib.base import BaseDrinkClass
 from lib.protocol import DrinkClientSocket
 from lib.protocol import DrinkProtocol
-#from lib.protocol import Alcohol_to_Pump
+from lib.protocol import ALCOHOL_TO_PUMP
+
+pins = [8, 10, 12, 26, 28, 38, 40, 3]
 
 base_recipe = DrinkProtocol()
-recipes = [
-    base_recipe.transform("gin and tonic", 40, 40, 5),
-    #base_recipe.transform("Whiskey Coke", Alcohol_to_Pump.WHISKEY.name, Alcohol_to_Pump.COKE.name, 4),
-    #base_recipe.transform("Vodka Sprite", Alcohol_to_Pump.VODKA.name, Alcohol_to_Pump.SPRITE.name, 1),
-    #base_recipe.transform("Bourbon Coke", Alcohol_to_Pump.BOURBON.name, Alcohol_to_Pump.COKE.name, 5),
-    #base_recipe.transform("CLEAN CYCLE FINISHED", "CLEANER", "CLEANER", 25)
-    ]
-
+recipes = []
+for pin in pins:
+    recipes.append(base_recipe.transform("gin and tonic", pin, pin, 5))
 
 for recipe in recipes:
     drinksock = DrinkClientSocket()
