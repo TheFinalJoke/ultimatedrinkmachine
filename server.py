@@ -20,6 +20,7 @@ class DrinkServer(BaseDrinkClass):
         self.header = 10
 
     def operate_pump(self, pump, strength):
+        self.debug(f'Operating pump {pump} for {strength} secs')
         GPIO.output(pump, GPIO.LOW)
         time.sleep(strength)
         GPIO.output(pump, GPIO.HIGH)
@@ -28,6 +29,10 @@ class DrinkServer(BaseDrinkClass):
         pump_num = ALCOHOL_TO_PUMP[liquid].value
         self.operate_pump(pump_num, strength)
     
+    def calculate_mixer_length(self, alcochol_strength):
+        total_time = 180
+        return total_time - alcochol_strength
+
     def intiate_cleancycle(self):
         try:
             pump_num = ALCOHOL_TO_PUMP['Cleaner'].value
@@ -40,6 +45,7 @@ class DrinkServer(BaseDrinkClass):
         alcohol = recipe.get("ALCOHOL")
         mixer = recipe.get("MIXER")
         strength = recipe.get("STRENGTH")
+        mixer_strength = self.calculate_mixer_length(strength)
         if alcohol == "Cleaner":
             self.info("Initializing Cleaning cycle")
             self.intiate_cleancycle()
@@ -48,7 +54,7 @@ class DrinkServer(BaseDrinkClass):
             self.debug(f"Dispensing {alcohol}")
             self.dispense_liquid(alcohol, strength)
             self.debug(f"Dispensing {mixer}")
-            self.dispense_liquid(mixer, 5)
+            self.dispense_liquid(mixer, mixer_strength)
             self.debug(f"Dispensed {recipe['NAME']}")
         return recipe.get("NAME")
  
